@@ -81,4 +81,4 @@ class DBStorage:
 
 
 if __name__ == "__main__":
-    storage.reload()
+    models.storage.reload()

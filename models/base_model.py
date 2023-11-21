@@ -36,8 +36,9 @@ class BaseModel(Base):
                                                      '%Y-%m-%dT%H:%M:%S.%f')
             kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
                                                      '%Y-%m-%dT%H:%M:%S.%f')
-            if key != "__class__":
-                setattr(self, key, value)
+            for key, value in kwargs.items():
+                if key != "__class__":
+                    setattr(self, key, value)
 
             del kwargs['__class__']
             self.__dict__.update(kwargs)
@@ -51,8 +52,8 @@ class BaseModel(Base):
         """Updates updated_at with current time when instance is changed"""
         from models import storage
         self.updated_at = datetime.now()
-        storage.new(self)
-        storage.save()
+        models.storage.new(self)
+        models.storage.save()
 
     def to_dict(self):
         """Convert instance into dict format"""
@@ -67,4 +68,4 @@ class BaseModel(Base):
 
     def delete(self):
         """Deletes the current instance from the storage"""
-        storage.delete(self)
+        models.storage.delete(self)
