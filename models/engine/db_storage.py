@@ -9,6 +9,7 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
+from models import storage
 from os import getenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session
@@ -77,3 +78,7 @@ class DBStorage:
     def close(self):
         """Close the working SQLAlchemy session."""
         self.__session.close()
+
+
+if __name__ == "__main__":
+    storage.reload()

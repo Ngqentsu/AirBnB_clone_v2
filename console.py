@@ -45,7 +45,7 @@ class HBNBCommand(cmd.Cmd):
             obj = eval("{}()".format(my_list[0]))
             for i in my_list:
                 second_arg = i.split("=")
-                if len(second_arg) is 2:
+                if len(second_arg) == 2:
                     if (second_arg[1][0:1] == '"'
                             and second_arg[1][-1:] == '"'):
                         second_arg[1] = second_arg[1].replace("_", " ")
