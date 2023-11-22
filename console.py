@@ -45,7 +45,7 @@ class HBNBCommand(cmd.Cmd):
             obj = eval("{}()".format(my_list[0]))
             for i in my_list:
                 second_arg = i.split("=")
-                if len(second_arg) is 2:
+                if len(second_arg) == 2:
                     if (second_arg[1][0:1] == '"'
                             and second_arg[1][-1:] == '"'):
                         second_arg[1] = second_arg[1].replace("_", " ")
@@ -249,7 +249,7 @@ class HBNBCommand(cmd.Cmd):
             elif my_list[1][:6] == "update":
                 args = self.strip_clean(my_list)
                 if isinstance(args, list):
-                    obj = storage.all()
+                    obj = models.storage.all()
                     key = args[0] + ' ' + args[1]
                     for k, v in args[2].items():
                         self.do_update(key + ' "{}" "{}"'.format(k, v))
