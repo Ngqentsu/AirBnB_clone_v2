@@ -4,6 +4,8 @@ from models.base_model import BaseModel
 from models.base_model import Base
 from sqlalchemy import Column
 from sqlalchemy import String
+from sqlalchemy import Table
+from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 
 association_table = Table('place_amenity', Base.metadata,
@@ -13,6 +15,7 @@ association_table = Table('place_amenity', Base.metadata,
                           Column('amenity_id', String(60),
                                  ForeignKey('amenities.id'),
                                  primary_key=True, nullable=False)
+
 
 class Amenity(BaseModel, Base):
     """Represents an Amenity for a MySQL database.
