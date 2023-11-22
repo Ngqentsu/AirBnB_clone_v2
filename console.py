@@ -50,7 +50,9 @@ class HBNBCommand(cmd.Cmd):
                         kwargs[key] = value
                         obj = eval("{}(**kwargs)".format(class_name))
                         obj.save()
-                        print("{}".format(obj.id))
+                        obj = eval("{}(**kwargs)".format(class_name))
+                        obj.save()
+                        print(obj.id)
         except SyntaxError:
             print("** class name missing **")
         except NameError:
@@ -124,6 +126,7 @@ class HBNBCommand(cmd.Cmd):
         Exceptions:
             NameError: when there is no object taht has the name
         """
+        from models import storage
         objects = storage.all()
         my_list = []
         if not line:
