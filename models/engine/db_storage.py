@@ -9,7 +9,6 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
-from models import storage
 from os import getenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session
@@ -41,7 +40,7 @@ class DBStorage:
     def all(self, cls=None):
         """Query on current database session of all objects of the class."""
 
-        if cls:
+        if cls is not None:
             if isinstance(cls, str):
                 cls = globals().get(cls, None)
             if cls:
@@ -81,4 +80,4 @@ class DBStorage:
 
 
 if __name__ == "__main__":
-    models.storage.reload()
+    storage.reload()

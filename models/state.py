@@ -2,7 +2,8 @@
 """ State Module for HBNB project """
 from models.base_model import BaseModel
 from models.base_model import Base
-import models
+from models import storage
+from os import getenv
 from models.city import City
 from sqlalchemy import Column
 from sqlalchemy import String
@@ -24,8 +25,5 @@ class State(BaseModel, Base):
         @property
         def cities(self):
             """Get a list of all related City objects."""
-            city_list = []
-            for city in list(models.storage.all(City).values()):
-                if city.state_id == self.id:
-                    city_list.append(city)
-            return city_list
+            all_cities = list(storage.all(City).values())
+            return [city for city in all_cities if city.state_id == self.id]
