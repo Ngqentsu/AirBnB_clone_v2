@@ -32,47 +32,29 @@ class HBNBCommand(cmd.Cmd):
         """
         try:
             if not line:
-                raise SyntaxError("class name missing")
-
-            lex = shlex(line, posix=True)
-            lex.wordchars += '_'
-            lex.whitespace += '='
-            lex.commenters = ''
-
-            class_name = lex.get_token()
-            if class_name not in self.all_classes:
-                raise NameError("class doesn't exist")
-
-            attributes = {}
-            current_key = None
-            for token in lex:
-                if token == '=':
-                    current_key = lex.get_token()
-                    if not current_key:
-                        raise SyntaxError("invalid key format")
-                    current_key = current_key.replace('_', ' ')
-                elif token == '"':
-                    value = '"'
-                    while True:
-                        next_token = lex.get_token()
-                        if not next_token:
-                            raise SyntaxError("unterminated string")
-                        if next_token == '"':
-                            break
-                        value += next_token
-                    value += '"'
-                    attributes[current_key] = value
-                else:
-                    attributes[current_key] = token
-
-            obj = storage.create_instance(class_name, **attributes)
-            print(obj.id)
-        except SyntaxError as e:
-            print(f"** {str(e)}")
-        except NameError as e:
-            print(f"** {str(e)}")
-        except Exception as e:
-            print(f"Error: {str(e)}")
+                raise SyntaxError()
+            my_list = shlex.split(line)
+            if my_list[0] not in self.all_classes:
+                raise NameError()
+            class_name = my_list.pop(0)
+            kwargs = {}
+            for item in my_list:
+                if "=" in item:
+                    key, value = item.split("=")
+                    if value.startswith('"') and value.endswith('"'):
+                        value = value[1:-1].replace("_", " ")
+                        try:
+                            value = eval(value)
+                        except Exception:
+                            pass
+                        kwargs[key] = value
+                        obj = eval("{}(**kwargs)".format(class_name))
+                        obj.save()
+                        print("{}".format(obj.id))
+        except SyntaxError:
+            print("** class name missing **")
+        except NameError:
+            print("** class doesn't exist **")
 
     def do_show(self, line):
         """Prints the string representation of an instance
