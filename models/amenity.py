@@ -17,15 +17,17 @@ association_table = Table('place_amenity', Base.metadata,
                                  primary_key=True, nullable=False)
 
 
-class Amenity(BaseModel, Base):
-    """Represents an Amenity for a MySQL database.
+                          class Amenity(BaseModel, Base):
+                          """Represents an Amenity for a MySQL database.
 
-    Attributes:
-        __tablename__ (str): Name of MySQL table to store Amenities.
-        name (string): The amenity name.
-        place_amenities (sqlalchemy relationship): Place-Amenity relationship.
-    """
-    __tablename__ = "amenities"
-    name = Column(String(128), nullable=False)
-    place_amenities = relationship("Place", secondary="place_amenity",
-                                   viewonly=False)
+                          Attributes:
+                          __tablename__ (str): Name of MySQL table
+                          name (string): The amenity name.
+                          place_amenities : Place-Amenity relationship.
+                          """
+                          __tablename__="amenities"
+                          name=Column(String(128), nullable=False)
+                          sec_table="place_amenity"
+                          place_amenities=relationship("Place",
+                                                       secondary=sec_table,
+                                                       viewonly=False)
