@@ -1,13 +1,7 @@
 #!/usr/bin/python3
 """This is the console for AirBnB"""
 import cmd
-from datetime import datetime
-from models.user import User
-from models.state import State
-from models.city import City
-from models.amenity import Amenity
-from models.place import Place
-from models.review import Review
+import shlex
 from shlex import split
 
 
@@ -38,25 +32,47 @@ class HBNBCommand(cmd.Cmd):
         """
         try:
             if not line:
-                raise SyntaxError()
-            my_list = line.split(" ")
-            obj = eval("{}()".format(my_list[0]))
-            for i in my_list:
-                second_arg = i.split("=")
-                if len(second_arg) == 2:
-                    if (second_arg[1][0:1] == '"'
-                            and second_arg[1][-1:] == '"'):
-                        second_arg[1] = second_arg[1].replace("_", " ")
-                    try:
-                        obj.__dict__[second_arg[0]] = eval(second_arg[1])
-                    except Exception:
-                        obj.__dict__[sec_arg[0]] = second_arg[1]
-            obj.save()
-            print("{}".format(obj.id))
-        except SyntaxError:
-            print("** class name missing **")
-        except NameError:
-            print("** class doesn't exist **")
+                raise SyntaxError("class name missing")
+
+            lex = shlex(line, posix=True)
+            lex.wordchars += '_'
+            lex.whitespace += '='
+            lex.commenters = ''
+
+            class_name = lex.get_token()
+            if class_name not in self.all_classes:
+                raise NameError("class doesn't exist")
+
+            attributes = {}
+            current_key = None
+            for token in lex:
+                if token == '=':
+                    current_key = lex.get_token()
+                    if not current_key:
+                        raise SyntaxError("invalid key format")
+                    current_key = current_key.replace('_', ' ')
+                elif token == '"':
+                    value = '"'
+                    while True:
+                        next_token = lex.get_token()
+                        if not next_token:
+                            raise SyntaxError("unterminated string")
+                        if next_token == '"':
+                            break
+                        value += next_token
+                    value += '"'
+                    attributes[current_key] = value
+                else:
+                    attributes[current_key] = token
+
+            obj = storage.create_instance(class_name, **attributes)
+            print(obj.id)
+        except SyntaxError as e:
+            print(f"** {str(e)}")
+        except NameError as e:
+            print(f"** {str(e)}")
+        except Exception as e:
+            print(f"Error: {str(e)}")
 
     def do_show(self, line):
         """Prints the string representation of an instance
