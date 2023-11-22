@@ -1,13 +1,7 @@
 #!/usr/bin/python3
 """This is the console for AirBnB"""
 import cmd
-from datetime import datetime
-from models.user import User
-from models.state import State
-from models.city import City
-from models.amenity import Amenity
-from models.place import Place
-from models.review import Review
+import shlex
 from shlex import split
 
 
@@ -39,20 +33,24 @@ class HBNBCommand(cmd.Cmd):
         try:
             if not line:
                 raise SyntaxError()
-            my_list = line.split(" ")
-            obj = eval("{}()".format(my_list[0]))
-            for i in my_list:
-                second_arg = i.split("=")
-                if len(second_arg) == 2:
-                    if (second_arg[1][0:1] == '"'
-                            and second_arg[1][-1:] == '"'):
-                        second_arg[1] = second_arg[1].replace("_", " ")
-                    try:
-                        obj.__dict__[second_arg[0]] = eval(second_arg[1])
-                    except Exception:
-                        obj.__dict__[sec_arg[0]] = second_arg[1]
-            obj.save()
-            print("{}".format(obj.id))
+            my_list = shlex.split(line)
+            if my_list[0] not in self.all_classes:
+                raise NameError()
+            class_name = my_list.pop(0)
+            kwargs = {}
+            for item in my_list:
+                if "=" in item:
+                    key, value = item.split("=")
+                    if value.startswith('"') and value.endswith('"'):
+                        value = value[1:-1].replace("_", " ")
+                        try:
+                            value = eval(value)
+                        except Exception:
+                            pass
+                        kwargs[key] = value
+                        obj = eval("{}(**kwargs)".format(class_name))
+                        obj.save()
+                        print("{}".format(obj.id))
         except SyntaxError:
             print("** class name missing **")
         except NameError:
