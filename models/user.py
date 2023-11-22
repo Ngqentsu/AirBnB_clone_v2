@@ -1,10 +1,8 @@
 #!/usr/bin/python3
 """This is the user class"""
-from models.base_model import BaseModel
-from models.base_model import Base
+from models.base_model import BaseModel, Base
 from os import getenv
-from sqlalchemy import Column
-from sqlalchemy import String
+from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 
 
@@ -12,7 +10,7 @@ class User(BaseModel, Base):
     """ Represent a user for a MySQL database.
 
     Attributes:
-        __tablename__ (str): represents the table name, users
+        __tablename__: represents the table name, users
         email: (sqlalchemy String): The user's email address.
         password (sqlalchemy String): The user's password.
         first_name (sqlalchemy String): The user's first name.
