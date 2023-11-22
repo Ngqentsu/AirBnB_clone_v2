@@ -21,22 +21,23 @@ class FileStorage:
     __objects = {}
 
     def all(self, cls=None):
-        """returns a dictionary
-        Return:
-            returns a dictionary of __object
+        """Returns all the objects
+
+        If a class is specified, the method only
+        returns the objects of same type.
+
         """
-        if cls is not None:
-            new_dictionary = {}
-            for key, values in FileStorage.__objects.items():
-                #print("Clase: {}".format(cls.__name__))
-                if (type(cls) is str):
-                    #print("String: {}".format(cls))
-                    cls = eval(cls)
-                if (cls.__name__ in key):
-                    new_dictionary.update({key: values})
-            return new_dictionary
-        else:
-            return self.__objects
+
+        if cls:
+            same_type = dict()
+
+            for key, obj in self.__objects.items():
+                if obj.__class__ == cls:
+                    same_type[key] = obj
+
+            return same_type
+
+        return self.__objects
 
     def new(self, obj):
         """sets __object to given obj
@@ -68,14 +69,16 @@ class FileStorage:
             pass
 
     def delete(self, obj=None):
-        """ Delete object
+        """Delete obj from __objects if it's inside
         """
-        if obj is not None:
-            key = (type(obj).__name__) + '.' + obj.__dict__['id']
-            del self.__objects[key]
+        if obj:
+            key = "{}.{}".format(type(obj).__name__, obj.id)
+
+            if self.__objects[key]:
+                del self.__objects[key]
+                self.save()
 
     def close(self):
-        """
-        call reload() method for deserializing the JSON file to objects
+        """Deserialize the JSON file to objects
         """
         self.reload()
