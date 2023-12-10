@@ -1,11 +1,8 @@
 #!/usr/bin/python3
 """ Fabric script that generates .tgz archive from web_static """
 
-from fabric.api import local, run, env
+from fabric.api import local, run
 from datetime import datetime
-
-env.user = 'your_username'
-env.hosts = ['your_host']
 
 
 def do_pack():
