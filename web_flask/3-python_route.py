@@ -18,13 +18,13 @@ def hbnb():
     return 'HBNB'
 
 
-@app.route('/python', strict_slashes=False)
 @app.route('/c/<text>', strict_slashes=False)
 def C(text):
     """Message that will display when executing /c/<text> """
     return 'C {}'.format(text.replace('_', ' '))
 
 
+@app.route('/python', strict_slashes=False)
 @app.route('/python/<text>', strict_slashes=False)
 def Python(text='is cool'):
     """Message that will display when executing /python/<text> """
