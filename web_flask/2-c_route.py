@@ -39,7 +39,7 @@ def hbnb():
 
 
 @app.route('/c/<text>', strict_slashes=False)
-def hbnb():
+def C(text):
     """Message that will display when executing /c/<text> """
     return 'C {}'.format(text.replace('_', ' '))
 
