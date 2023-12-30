@@ -38,5 +38,5 @@ def do_deploy(archive_path):
             .format(filename))
 
         return True
-    except:
+    except Exception as e:
         return False
